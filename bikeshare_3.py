@@ -3,16 +3,12 @@ import time
 import pandas as pd
 import numpy as np
 import datetime # operations to parse dates
-from pprint import pprint # use to print data structures like dictionaries in
-                          # a nicer way than the base print function.
-import matplotlib as mpl # Still required to change the sizes of plots
 
 #get user input for city
 def get_city():
     try:
         city = input('\nHello! Let\'s explore some US bikeshare data!\n'
                      'Would you like to see data for Chicago, New York City, or Washington?\n')
-        print('Getting data....')
         # read data and assign to city_data
         city_data = pd.read_csv("%s.csv" % city.lower().replace(' ', '_'))
         city_data['Start Time'] = pd.to_datetime(city_data['Start Time'])
@@ -20,43 +16,42 @@ def get_city():
         city_data['day_of_week'] = city_data['Start Time'].dt.weekday_name
         city_data['month'] = city_data['Start Time'].dt.strftime('%B')
         city_data['hour'] = city_data['Start Time'].dt.strftime('%H %p')
-        print('Done!')
         return city_data
     except:
-        print('\nThat is not a valid city, try again\n')
+        print('That is not a valid answer. Please try again.')
         get_city()
 
 # get time period for filtering
-def get_time_period():
+def get_time_period(city_data):
         time_period = input('\nWould you like to filter the data by month, day, or not at'
                         ' all? Type "none" for no time filter.\n').lower()
         if time_period == 'month' or time_period == 'm':
             return ['month', get_month()]
         elif time_period == 'day' or time_period == 'd':
-            return ['day', get_day()]
+            return ['day', get_day_of_week()]
         elif time_period == 'none' or time_period == 'n':
             return ['none', 'no filter']
         else:    
             print('That is not a valid answer. Please try again.')
         return get_time_period()
 
-# get user input for month (all, january, february, ... , june)
+# get month for filtering
 def get_month(city_data):
     try:
         month = input('\nWhich month? January, February, March, April, May, or June?\n').lower()
         return city_data[city_data['Start Time'].dt.month == datetime.strptime(month, '%B').month]
     except:
-        print("\nI'm sorry, I'm not sure which month you're trying to filter by. Let's try again.")
+        print('That is not a valid answer. Please try again.')
         return get_month(city_data) 
 
-# get user input for day of week (all, monday, tuesday, ... sunday)
-def get_day(city_data):
+# get day of week for filtering
+def get_day_of_week(city_data):
     try:
         day_of_week = input('\nWhich day of the week? Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, or Sunday?\n').title()
         return city_data[city_data['day_of_week'] == day]
     except:    
-        print("\nI'm sorry, I'm not sure which day of the week you're trying to filter by. Let's try again.")
-        return get_day(city_data)
+        print('That is not a valid answer. Please try again.')
+        return get_day_of_week()
 
 def time_stats(df):
     """Displays statistics on the most frequent times of travel."""
