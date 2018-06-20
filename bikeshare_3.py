@@ -19,7 +19,7 @@ def get_city():
     print('That is not a valid answer. Please try again.')
 
 def get_city_data(filename):
-  print('Accessing %s' % filename)
+  #print('Accessing %s' % filename)
   return pd.read_csv(filename)
 
 # get time period for filtering
@@ -40,6 +40,7 @@ def get_month():
       return input('January, February, March, April, May, or June?\n').lower()
     except:
       print('That is not a valid answer. Please try again.')
+      #return get_month(city_data)
 
 # get day of week for filtering
 def get_day():
@@ -47,11 +48,12 @@ def get_day():
         return input('\nWhich day of the week? Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, or Sunday?\n').title()
     except:    
         print('That is not a valid answer. Please try again.')
+        #return get_day(city_data)
       
 def main():
     # pick a city
     city = get_city()
-    print('Great! We\'ll use %s.' % city)
+    #print('Great! We\'ll use %s.' % city)
     
     # load the file with input from above
     city_data = get_city_data(cities[city])
@@ -63,16 +65,25 @@ def main():
 
     # choose time period
     period = get_time_period()
-    print('Filtering on time period: %s.' % period)
+    #print('Filtering on time period: %s' % period)
 
     if (period == 'month'):
       month = get_month()
-      city_data['Start Time'].dt.month # BROKEN IDK WHY
-      print('Month selected: %s.' % month)
+      city_data['Start_Time'].dt.month 
+      #print('Month selected: %s.' % month)
     elif (period == 'day'):
       day = get_day()
-      city_data[city_data['day'] == day] # BROKEN IDK WHY
-      print('Day selected: %s.' % day)
+      city_data['Start_Time'].dt.dayofweek  
+      #print('Day selected: %s.' % day)
+
+
+#Print a heading that specifies which city this data is for and selected filters
+    print('\n')
+    print('-------------------------------------')
+    print('Great! We\'ll use %s.' % city)
+    print('Time period selected: %s' % period)
+    #print('Month selected: %s.' % month)
+    #print('Day selected: %s.' % day)
 
 if __name__ == "__main__":
 	main()
