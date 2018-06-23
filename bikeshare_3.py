@@ -57,7 +57,6 @@ def main():
     
     # load the file with input from above
     city_data = get_city_data(cities[city])
-    
     # parse datetime and column names
     city_data['Start Time'] = pd.to_datetime(city_data['Start Time'])
     city_data['End Time'] = pd.to_datetime(city_data['End Time'])  
@@ -76,14 +75,51 @@ def main():
       city_data['Start_Time'].dt.dayofweek  
       #print('Day selected: %s.' % day)
 
-
-#Print a heading that specifies which city this data is for and selected filters
+#Print heading that specifies selected city, filters
     print('\n')
     print('-------------------------------------')
     print('Great! We\'ll use %s.' % city)
     print('Time period selected: %s' % period)
+    if (period == 'month'):
+      print(month)
+    elif (period == 'day'):
+      print(day)
+
+    #For context, print total number of trips for this city and filter
+    print("total trips" (city_data['Start Time'].count() )
     #print('Month selected: %s.' % month)
     #print('Day selected: %s.' % day)
+
+    # TO DO: display the most common month
+
+    # TO DO: display the most common day of week
+
+    # TO DO: display the most common start hour
+
+    # TO DO: display most commonly used start station
+
+    # TO DO: display most commonly used end station
+
+    # TO DO: display most frequent combination of start station and end station trip
+
+    # TO DO: display total travel time
+
+    # TO DO: display mean travel time
+
+    # TO DO: Display counts of user types
+
+    # TO DO: Display counts of gender
+
+    # TO DO: Display earliest, most recent, and most common year of birth
+
+    restart = input('\nWould you like to restart? Enter yes or no.\n')
+    if restart.lower() == 'yes' or restart.lower() == 'y':
+        main()
+    elif restart.lower() == 'no' or restart.lower() == 'n':
+        return
+    else:
+        print("\nI'm not sure if you wanted to restart or not. Let's try again.")
+        return restart()
 
 if __name__ == "__main__":
 	main()
