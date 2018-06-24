@@ -19,7 +19,6 @@ def get_city():
     print('That is not a valid answer. Please try again.')
 
 def get_city_data(filename):
-  #print('Accessing %s' % filename)
   return pd.read_csv(filename)
 
 # get time period for filtering
@@ -40,7 +39,6 @@ def get_month():
       return input('January, February, March, April, May, or June?\n').lower()
     except:
       print('That is not a valid answer. Please try again.')
-      #return get_month(city_data)
 
 # get day of week for filtering
 def get_day():
@@ -48,7 +46,6 @@ def get_day():
         return input('\nWhich day of the week? Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, or Sunday?\n').title()
     except:    
         print('That is not a valid answer. Please try again.')
-        #return get_day(city_data)
 
 def display_data(city_data, row):
     display = input('\nWould you like to view individual trip data?'
@@ -62,14 +59,12 @@ def display_data(city_data, row):
     else:
         print('That is not a valid answer. Please try again.')
         return display_data(city_data, row)
-
-        
-
+#https://stackoverflow.com/questions/43772362/how-to-print-a-specific-row-of-a-pandas-dataframe
+#https://pandas.pydata.org/pandas-docs/stable/indexing.html
 
 def main():
     # pick a city
     city = get_city()
-    #print('Great! We\'ll use %s.' % city)
     
     # load the file with input from above
     city_data = get_city_data(cities[city])
@@ -92,13 +87,9 @@ def main():
     if (period == 'month'):
       month = get_month()
       city_data['Start_Time'].dt.month 
-      #print('Month selected: %s.' % month)
     elif (period == 'day'):
       day = get_day()
       city_data['Start_Time'].dt.weekday_name
-      ##city_data[city_data['day'] == day] 
-      ##city_data['Start_Time'].dt.dayofweek  
-      #print('Day selected: %s.' % day)
 
 #Print heading that specifies selected city, filters
     print('\n')
@@ -106,17 +97,15 @@ def main():
     print('Great! We\'ll use %s.' % city)
     print('Time period selected: %s' % period)
 
-    #For context, print total number of trips for this city and filter
+    # display total number of trips for this city and filter
     print('Total trips: ', (city_data['Start_Time'].count()))
-    #print('Month selected: %s.' % month)
-    #print('Day selected: %s.' % day)
     
     print('\nTrip Info:')
     # display the most common month
     popular_month = city_data['Month'].mode()[0]
     print(popular_month, 'is the month with the highest ridership')
 
-    #display the most common day of week
+    # display the most common day of week
     days_of_week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday',
                     'Saturday', 'Sunday']
     index = int(city_data['Start_Time'].dt.dayofweek.mode())
@@ -173,8 +162,8 @@ def main():
         print("\nI'm not sure if you wanted to restart or not. Let's try again.")
         return restart()
 
-#TO DO:
-    #print('\nBusiness Analysis:')
+    #TO DO:
+    print('\nBusiness Analysis:')
     #How many bikes should each bikeshare have available?
     #What is the optimal driving time between stations?
 
