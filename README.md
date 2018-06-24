@@ -46,7 +46,7 @@ User information
 * Which users are more likely to pay for yearly subscription? 
 * Which users are more likely to buy short-term, such as 3-day or 24 hour passes? 
 * How does the use of bikes vary by cities? 
-* How does the weather and the season impact bikeshare use?
+* How does the season impact bikeshare use?
 * Are certain user age groups more likely to use the bikeshare system than others?
 
 ## Resources
