@@ -1,6 +1,5 @@
 # Importing packages and functions
 import pandas as pd
-import numpy as np
 import datetime # operations to parse dates
 import time
 import csv
@@ -161,11 +160,6 @@ def main():
     else:
         print("\nI'm not sure if you wanted to restart or not. Let's try again.")
         return restart()
-
-    #TO DO:
-    print('\nBusiness Analysis:')
-    #How many bikes should each bikeshare have available?
-    #What is the optimal driving time between stations?
 
 if __name__ == "__main__":
 	main()
