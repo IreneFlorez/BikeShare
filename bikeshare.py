@@ -57,10 +57,19 @@ def main():
     
     # load the file with input from above
     city_data = get_city_data(cities[city])
-    # parse datetime and column names
-    city_data['Start Time'] = pd.to_datetime(city_data['Start Time'])
-    city_data['End Time'] = pd.to_datetime(city_data['End Time'])  
-    city_data.columns = [x.strip().replace(' ', '_') for x in city_data.columns]
+    df = pd.DataFrame(city_data)
+    ##df = get_city_data(cities[city])
+
+    # parse datetime 
+    df['Start Time'] = pd.to_datetime(df['Start Time'])
+    df['End Time'] = pd.to_datetime(df['End Time']) 
+    # extract month and hour from the Start Time column to create month, hour columns
+    df['Month'] = df['Start Time'].dt.month
+    df['Hour'] = df['Start Time'].dt.hour 
+    # create 'journey' column that concatenates start_station, end_station 
+    df['Journey'] = df['Start Station'].str.cat(df['End Station'], sep=' to ')
+    #format column names
+    df.columns = [x.strip().replace(' ', '_') for x in df.columns]
 
     # choose time period
     period = get_time_period()
@@ -68,11 +77,12 @@ def main():
 
     if (period == 'month'):
       month = get_month()
-      city_data['Start_Time'].dt.month 
+      df['Start_Time'].dt.month 
       #print('Month selected: %s.' % month)
     elif (period == 'day'):
       day = get_day()
-      city_data['Start_Time'].dt.dayofweek  
+      df['Start_Time'].dt.weekday_name
+      ##df['Start_Time'].dt.dayofweek  
       #print('Day selected: %s.' % day)
 
 #Print heading that specifies selected city, filters
@@ -86,21 +96,32 @@ def main():
       print(day)
 
     #For context, print total number of trips for this city and filter
-    print("total trips" (city_data['Start Time'].count() )
+    print("Total trips: ", (df['Start_Time'].count() )
     #print('Month selected: %s.' % month)
     #print('Day selected: %s.' % day)
+    
+    # display the most common month
+    popular_month = df['Month'].mode()[0]
+    print('Popular month: ', popular_month)
 
-    # TO DO: display the most common month
+    #display the most common day of week
+    days_of_week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday',
+                    'Saturday', 'Sunday']
+    index = int(df['Start_Time'].dt.dayofweek.mode())
+    popular_day = days_of_week[index]
+    print('Popular day: ', popular_day)
 
-    # TO DO: display the most common day of week
+    # display the most common hour (from 0 to 23)
+    popular_hour = df['Hour'].mode()[0]
+    print('Popular hour: ', popular_hour)
 
-    # TO DO: display the most common start hour
+    # display most commonly used start station & end station
+    popular_start_station = df['Start_Station'].mode().to_string(index = False)
+    popular_end_station = df['End_Station'].mode().to_string(index = False)
+    print('Popular Start Station: ', popular_start_station)
+    print('Popular End Station: ', popular_end_station)
 
-    # TO DO: display most commonly used start station
-
-    # TO DO: display most commonly used end station
-
-    # TO DO: display most frequent combination of start station and end station trip
+    # display most frequent combination of start station and end station trip
 
     # TO DO: display total travel time
 
