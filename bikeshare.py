@@ -49,7 +49,23 @@ def get_day():
     except:    
         print('That is not a valid answer. Please try again.')
         #return get_day(city_data)
-      
+
+def display_data(city_data, row):
+    display = input('\nWould you like to view individual trip data?'
+                    ' Type \'yes\' or \'no\'.\n').lower()
+    if display == 'yes' or display == 'y':
+        print(city_data.iloc[row:row+5])
+        row += 5
+        return display_data(city_data, row)
+    if display == 'no' or display == 'n':
+        return
+    else:
+        print('That is not a valid answer. Please try again.')
+        return display_data(city_data, row)
+
+        
+
+
 def main():
     # pick a city
     city = get_city()
@@ -57,19 +73,17 @@ def main():
     
     # load the file with input from above
     city_data = get_city_data(cities[city])
-    df = pd.DataFrame(city_data)
-    ##df = get_city_data(cities[city])
 
     # parse datetime 
-    df['Start Time'] = pd.to_datetime(df['Start Time'])
-    df['End Time'] = pd.to_datetime(df['End Time']) 
+    city_data['Start Time'] = pd.to_datetime(city_data['Start Time'])
+    city_data['End Time'] = pd.to_datetime(city_data['End Time']) 
     # extract month and hour from the Start Time column to create month, hour columns
-    df['Month'] = df['Start Time'].dt.month
-    df['Hour'] = df['Start Time'].dt.hour 
+    city_data['Month'] = city_data['Start Time'].dt.month
+    city_data['Hour'] = city_data['Start Time'].dt.hour 
     # create 'journey' column that concatenates start_station, end_station 
-    df['Journey'] = df['Start Station'].str.cat(df['End Station'], sep=' to ')
+    city_data['Journey'] = city_data['Start Station'].str.cat(city_data['End Station'], sep=' to ')
     #format column names
-    df.columns = [x.strip().replace(' ', '_') for x in df.columns]
+    city_data.columns = [x.strip().replace(' ', '_') for x in city_data.columns]
 
     # choose time period
     period = get_time_period()
@@ -77,12 +91,13 @@ def main():
 
     if (period == 'month'):
       month = get_month()
-      df['Start_Time'].dt.month 
+      city_data['Start_Time'].dt.month 
       #print('Month selected: %s.' % month)
     elif (period == 'day'):
       day = get_day()
-      df['Start_Time'].dt.weekday_name
-      ##df['Start_Time'].dt.dayofweek  
+      city_data['Start_Time'].dt.weekday_name
+      ##city_data[city_data['day'] == day] 
+      ##city_data['Start_Time'].dt.dayofweek  
       #print('Day selected: %s.' % day)
 
 #Print heading that specifies selected city, filters
@@ -90,48 +105,64 @@ def main():
     print('-------------------------------------')
     print('Great! We\'ll use %s.' % city)
     print('Time period selected: %s' % period)
-    if (period == 'month'):
-      print(month)
-    elif (period == 'day'):
-      print(day)
 
     #For context, print total number of trips for this city and filter
-    print("Total trips: ", (df['Start_Time'].count() )
+    print('Total trips: ', (city_data['Start_Time'].count()))
     #print('Month selected: %s.' % month)
     #print('Day selected: %s.' % day)
     
+    print('\nTrip Info:')
     # display the most common month
-    popular_month = df['Month'].mode()[0]
-    print('Popular month: ', popular_month)
+    popular_month = city_data['Month'].mode()[0]
+    print(popular_month, 'is the month with the highest ridership')
 
     #display the most common day of week
     days_of_week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday',
                     'Saturday', 'Sunday']
-    index = int(df['Start_Time'].dt.dayofweek.mode())
+    index = int(city_data['Start_Time'].dt.dayofweek.mode())
     popular_day = days_of_week[index]
-    print('Popular day: ', popular_day)
+    print(popular_day, 'is the day of the week with the highest ridership')
 
     # display the most common hour (from 0 to 23)
-    popular_hour = df['Hour'].mode()[0]
-    print('Popular hour: ', popular_hour)
+    popular_hour = city_data['Hour'].mode()[0]
+    print(popular_hour, 'is the most common trip start hour')
 
+    print('\nStation Info:')
     # display most commonly used start station & end station
-    popular_start_station = df['Start_Station'].mode().to_string(index = False)
-    popular_end_station = df['End_Station'].mode().to_string(index = False)
+    popular_start_station = city_data['Start_Station'].mode().to_string(index = False)
+    popular_end_station = city_data['End_Station'].mode().to_string(index = False)
     print('Popular Start Station: ', popular_start_station)
     print('Popular End Station: ', popular_end_station)
 
     # display most frequent combination of start station and end station trip
+    popular_journey = city_data['Journey'].mode().to_string(index = False)
+    print('Popular Journey: ', popular_journey)
 
-    # TO DO: display total travel time
+    print('\nOther Ridership Data:')
+    # display total travel time
+    total_travel_time = city_data['Trip_Duration'].sum()
+    print('Total Time Travel:', total_travel_time)
+    # display mean travel time
+    mean_travel_time = city_data['Trip_Duration'].mean()
+    print('Mean Time Travel:', mean_travel_time)
 
-    # TO DO: display mean travel time
+    print('\nUser Info:')
+    #Display counts of user types
+    user_types=city_data['User_Type'].value_counts()
+    print(user_types)
 
-    # TO DO: Display counts of user types
+    #Display counts of gender
+    gender_count=city_data['Gender'].value_counts()
+    print(gender_count)
 
-    # TO DO: Display counts of gender
+    # Display earliest, most recent, and most common year of birth
+    earliest = int(city_data['Birth_Year'].min())
+    recent = int(city_data['Birth_Year'].max())
+    mode = int(city_data['Birth_Year'].mode())
+    print('The oldest birth year in the dataset is listed as {}.\nThe most recent birth year in the dataset is {}.'
+          '\nThe most common birth year in the dataset is {}.'.format(earliest, recent, mode))
 
-    # TO DO: Display earliest, most recent, and most common year of birth
+    see_data = display_data(city_data, row=76)
 
     restart = input('\nWould you like to restart? Enter yes or no.\n')
     if restart.lower() == 'yes' or restart.lower() == 'y':
@@ -141,6 +172,8 @@ def main():
     else:
         print("\nI'm not sure if you wanted to restart or not. Let's try again.")
         return restart()
+
+
 
 if __name__ == "__main__":
 	main()
