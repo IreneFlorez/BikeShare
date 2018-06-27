@@ -24,14 +24,14 @@ def get_city_data(filename):
 def get_time_period():
   time_period = input('Would you like to filter the data by month, day, or not at all? Type "none" for no time filter.\n').lower()
   if time_period == 'month' or time_period == 'm':
-      return 'month'
+      month = get_month()
   elif time_period == 'day' or time_period == 'd':
-      return 'day'
+      day = get_day()
   elif time_period == 'none' or time_period == 'n':
       return 'none'
   else:    
       print('That is not a valid answer. Please try again.')
-
+      
 # get month for filtering
 def get_month():
     try:
@@ -61,6 +61,7 @@ def display_data(city_data, row):
 #https://stackoverflow.com/questions/43772362/how-to-print-a-specific-row-of-a-pandas-dataframe
 #https://pandas.pydata.org/pandas-docs/stable/indexing.html
 
+
 def main():
     # pick a city
     city = get_city()
@@ -82,12 +83,9 @@ def main():
     # choose time period
     period = get_time_period()
     #print('Filtering on time period: %s' % period)
-
     if (period == 'month'):
-      month = get_month()
       city_data['Start_Time'].dt.month 
     elif (period == 'day'):
-      day = get_day()
       city_data['Start_Time'].dt.weekday_name
 
 #Print heading that specifies selected city, filters
@@ -97,8 +95,9 @@ def main():
     print('Time period selected: %s' % period)
 
     # display total number of trips for this city and filter
-    print('Total trips: ', (city_data['Start_Time'].count()))
+    #print('Total trips: ', (city_data['Start_Time'].count()))
     
+    """Display statistics on the most frequent times of travel."""
     print('\nTrip Info:')
     # display the most common month
     popular_month = city_data['Month'].mode()[0]
@@ -115,6 +114,7 @@ def main():
     popular_hour = city_data['Hour'].mode()[0]
     print(popular_hour, 'is the most common trip start hour')
 
+    """Display statistics on the most popular stations and trip."""
     print('\nStation Info:')
     # display most commonly used start station & end station
     popular_start_station = city_data['Start_Station'].mode().to_string(index = False)
@@ -126,6 +126,7 @@ def main():
     popular_journey = city_data['Journey'].mode().to_string(index = False)
     print('Popular Journey: ', popular_journey)
 
+    """Displays statistics on the total and average trip duration."""
     print('\nOther Ridership Data:')
     # display total travel time
     total_travel_time = city_data['Trip_Duration'].sum()
@@ -134,22 +135,26 @@ def main():
     mean_travel_time = city_data['Trip_Duration'].mean()
     print('Mean Time Travel:', mean_travel_time)
 
+    """Displays statistics on bikeshare users."""
     print('\nUser Info:')
     #Display counts of user types
     user_types=city_data['User_Type'].value_counts()
     print(user_types)
+    print('\n')
 
     #Display counts of gender
-    gender_count=city_data['Gender'].value_counts()
-    print(gender_count)
-
     # Display earliest, most recent, and most common year of birth
-    earliest = int(city_data['Birth_Year'].min())
-    recent = int(city_data['Birth_Year'].max())
-    mode = int(city_data['Birth_Year'].mode())
-    print('The oldest birth year in the dataset is listed as {}.\nThe most recent birth year in the dataset is {}.'
+    #gender_count = city_data.groupby('Gender')['Gender'].count()
+    if city == 'chicago' or city == 'new york': 
+        gender_count = city_data['Gender'].value_counts()
+        print(gender_count)
+        earliest = int(city_data['Birth_Year'].min())
+        recent = int(city_data['Birth_Year'].max())
+        mode = int(city_data['Birth_Year'].mode())
+        print('The oldest birth year in the dataset is listed as {}.\nThe most recent birth year in the dataset is {}.'
           '\nThe most common birth year in the dataset is {}.'.format(earliest, recent, mode))
-
+    print('\n')
+    
     see_data = display_data(city_data, row=76)
 
     restart = input('\nWould you like to restart? Enter yes or no.\n')
