@@ -11,11 +11,13 @@ cities = {'chicago': 'chicago.csv',
 
 #get user input for city
 def get_city():
-  city_input = input('Hello! Let\'s explore some US bikeshare data!\nWould you like to see data for Chicago, New York, or Washington?\n')
-  if city_input.lower() in cities.keys():
-    return city_input.lower()
-  else:
-    print('That is not a valid answer. Please try again.')
+    while True:
+        try:
+            city_input = input('Hello! Let\'s explore some US bikeshare data!\nWould you like to see data for Chicago, New York, or Washington?\n')
+            if city_input.lower() in cities.keys():
+                return city_input.lower()
+        except:
+            print('That is not a valid answer. Please try again.')
 
 def get_city_data(filename):
   return pd.read_csv(filename)
