@@ -11,31 +11,56 @@ cities = {'chicago': 'chicago.csv',
 
 #get user input for city
 def get_city():
+    '''Asks the user for a city and returns the specified filter.
+    Args:
+        none.
+    Returns:
+        (str) City filter for the bikeshare data.
+    '''
     while True:
         try:
             city_input = input('Hello! Let\'s explore some US bikeshare data!\nWould you like to see data for Chicago, New York, or Washington?\n')
             if city_input.lower() in cities.keys():
                 return city_input.lower()
-        except:
+        except ValueError:
             print('That is not a valid answer. Please try again.')
+            get_city()
 
 def get_city_data(filename):
-  return pd.read_csv(filename)
+    '''Read CSV (comma-separated) file into DataFrame
+    Args:
+        city filter from get_city()
+    Returns:
+        DataFrame for the specified city's bikeshare data.
+    '''
+    return pd.read_csv(filename)
 
 # get time period for filtering
 def get_time_period():
-  time_period = input('Would you like to filter the data by month, day, or not at all? Type "none" for no time filter.\n').lower()
-  if time_period == 'month' or time_period == 'm':
-      month = get_month()
-  elif time_period == 'day' or time_period == 'd':
-      day = get_day()
-  elif time_period == 'none' or time_period == 'n':
-      return 'none'
-  else:    
-      print('That is not a valid answer. Please try again.')
+    '''Asks the user for a time period and returns the specified filter.
+    Args:
+        none.
+    Returns:
+        (str) Time period filter for the bikeshare data.
+    '''
+    time_period = input('Would you like to filter the data by month, day, or not at all? Type "none" for no time filter.\n').lower()
+    if time_period == 'month' or time_period == 'm':
+        month = get_month()
+    elif time_period == 'day' or time_period == 'd':
+        day = get_day()
+    elif time_period == 'none' or time_period == 'n':
+        return 'none'
+    else:    
+        print('That is not a valid answer. Please try again.')
       
 # get month for filtering
 def get_month():
+    '''Asks the user which month they want to filter for and returns the specified filter
+    Args:
+        none.
+    Returns:
+        (str) Month filter for the bikeshare data.
+    '''
     try:
       return input('January, February, March, April, May, or June?\n').lower()
     except:
@@ -43,12 +68,26 @@ def get_month():
 
 # get day of week for filtering
 def get_day():
+    '''Asks the user which day they want to filter for and returns the specified filter
+    Args:
+        none.
+    Returns:
+        (str) Day filter for the bikeshare data.
+    '''
     try:
         return input('\nWhich day of the week? Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, or Sunday?\n').title()
     except:    
         print('That is not a valid answer. Please try again.')
 
 def display_data(city_data, row):
+    """
+    Asks the user if they would you like to view individual trip data and loads the raw data 
+    Args:
+        city_data
+        ilocs
+    Returns:
+        raw data
+    """
     display = input('\nWould you like to view individual trip data?'
                     ' Type \'yes\' or \'no\'.\n').lower()
     if display == 'yes' or display == 'y':
@@ -65,6 +104,9 @@ def display_data(city_data, row):
 
 
 def main():
+    """
+    Loads analysis and data for the specified city and filters by month and day if applicable.
+    """
     # pick a city
     city = get_city()
     
