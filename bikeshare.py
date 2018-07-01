@@ -20,11 +20,12 @@ def get_city():
     while True:
         try:
             city_input = input('Hello! Let\'s explore some US bikeshare data!\nWould you like to see data for Chicago, New York, or Washington?\n')
-            if city_input.lower() in cities.keys():
-                return city_input.lower()
         except ValueError:
             print('That is not a valid answer. Please try again.')
-            get_city()
+        if city_input.lower() in cities.keys():
+            return city_input.lower()
+        else:
+            print('That is not a valid answer. Please try again.')
 
 def get_city_data(filename):
     '''Read CSV (comma-separated) file into DataFrame
