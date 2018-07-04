@@ -92,13 +92,15 @@ def get_data(filename):
     '''
     return pd.read_csv(filename)
 
-def month_day_allotment(city_data):
-    period = get_time_period_filter()
-    if (period == 'month'):
-        city_data['Start Time'].dt.month 
-    elif (period == 'day'):
-        city_data['Start Time'].dt.weekday_name
-    print('Great! We\'ll use %s' % period)
+# def month_day_allotment(city_data):
+#     period = get_time_period_filter()
+#     if (period == 'month'):
+#         city_data['Start Time'].dt.month 
+#     elif (period == 'day'):
+#         city_data['Start Time'].dt.weekday_name
+#     elif (period == 'none'):
+
+#     print('Great! We\'ll use %s' % period)
 
 def parse_data(city_data):
     '''convert columns to datetime, extract/concatenate data to create new columns, replace spaces with underscores
@@ -238,12 +240,12 @@ def main():
     # load the file with input from above
     city_data = get_data(cities[city])
     # choose time period
-    month_day_allotment(city_data)
-    #period = get_time_period_filter()
-    # if (period == 'month'):
-    #     city_data['Start_Time'].dt.month 
-    # elif (period == 'day'):
-    #     city_data['Start_Time'].dt.weekday_name
+    # month_day_allotment(city_data)
+    period = get_time_period_filter()
+    if (period == 'month'):
+        city_data['Start Time'].dt.month 
+    elif (period == 'day'):
+        city_data['Start Time'].dt.weekday_name
     parse_data(city_data)
     statistics(city_data)
     inconsistant_data_handling(city, city_data)
