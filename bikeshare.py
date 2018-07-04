@@ -241,12 +241,13 @@ def main():
     city_data = get_data(cities[city])
     # choose time period
     # month_day_allotment(city_data)
+    parse_data(city_data)
     period = get_time_period_filter()
     if (period == 'month'):
-        city_data['Start Time'].dt.month 
+        city_data['Start_Time'].dt.month 
     elif (period == 'day'):
-        city_data['Start Time'].dt.weekday_name
-    parse_data(city_data)
+        city_data['Start_Time'].dt.weekday_name
+    
     statistics(city_data)
     inconsistant_data_handling(city, city_data)
     display_data(city_data, row=76)
