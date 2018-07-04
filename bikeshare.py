@@ -9,9 +9,9 @@ cities = {'chicago': 'chicago.csv',
           'new york': 'new_york_city.csv',
           'washington': 'washington.csv',}
 
-months = ('january', 'february', 'march', 'april', 'may', 'june')
+months = ['january', 'february', 'march', 'april', 'may', 'june']
 
-days = ('monday','tuesday','wednesday','thursday','friday','saturday','sunday')
+days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday']
 
 #get user input for city
 def get_city_filter():
@@ -61,10 +61,12 @@ def get_month_filter():
         (str) Month filter for the bikeshare data.
     '''
     while True:
-        month_selection = input('Select a month, Jan - June \n')
+        month_selection = input('Select a month, January - June \n')
         if month_selection.lower() in months:
-            #city_data['Start_Time'].dt.month 
-            return month_selection
+            return month_selection            
+            print('\n')
+            print('-------------------------------------')
+            print('Great! We\'ll use %s.' % month_selection)
         print('That is not a valid answer. Please try again.')
 
 def get_day_filter():
@@ -78,8 +80,8 @@ def get_day_filter():
         day_selection = input('Which day of the week? \n')
         if day_selection.lower() in days:
             return day_selection
+            print('Great! We\'ll use %s.' % day_selection)
         print('That is not a valid answer. Please try again.')
-    #     city_data['Start_Time'].dt.weekday_name
     
 def get_data(filename):
     '''Read CSV (comma-separated) file into DataFrame
@@ -89,6 +91,14 @@ def get_data(filename):
         DataFrame for the specified city's bikeshare data.
     '''
     return pd.read_csv(filename)
+
+def month_day_allotment(city_data):
+    period = get_time_period_filter()
+    if (period == 'month'):
+        city_data['Start Time'].dt.month 
+    elif (period == 'day'):
+        city_data['Start Time'].dt.weekday_name
+    print('Great! We\'ll use %s' % period)
 
 def parse_data(city_data):
     '''convert columns to datetime, extract/concatenate data to create new columns, replace spaces with underscores
@@ -149,10 +159,8 @@ def statistics(city_data):
     print(popular_month, 'is the month with the highest ridership')
 
     # display the most common day of week
-    days_of_week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday',
-                    'Saturday', 'Sunday']
     index = int(city_data['Start_Time'].dt.dayofweek.mode())
-    popular_day = days_of_week[index]
+    popular_day = days[index]
     print(popular_day, 'is the day of the week with the highest ridership')
 
     # display the most common hour (from 0 to 23)
@@ -230,20 +238,13 @@ def main():
     # load the file with input from above
     city_data = get_data(cities[city])
     # choose time period
-    period = get_time_period_filter()
-    if (period == 'month'):
-        city_data['Start_Time'].dt.month 
-    elif (period == 'day'):
-        city_data['Start_Time'].dt.weekday_name
-
+    month_day_allotment(city_data)
+    #period = get_time_period_filter()
+    # if (period == 'month'):
+    #     city_data['Start_Time'].dt.month 
+    # elif (period == 'day'):
+    #     city_data['Start_Time'].dt.weekday_name
     parse_data(city_data)
-    
-    #Print heading that specifies selected city, filters
-    print('\n')
-    print('-------------------------------------')
-    print('Great! We\'ll use %s.' % city)
-    print('Time period selected: %s' % period)
-
     statistics(city_data)
     inconsistant_data_handling(city, city_data)
     display_data(city_data, row=76)
