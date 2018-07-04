@@ -9,6 +9,10 @@ cities = {'chicago': 'chicago.csv',
           'new york': 'new_york_city.csv',
           'washington': 'washington.csv',}
 
+# month, day filters
+months = ['january', 'february', 'march', 'april', 'may', 'june']
+days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday']
+
 #get user input for city
 def get_city():
     '''Asks the user for a city and returns the specified filter.
@@ -44,15 +48,18 @@ def get_time_period():
     Returns:
         (str) Time period filter for the bikeshare data.
     '''
-    time_period = input('Would you like to filter the data by month, day, or not at all? Type "none" for no time filter.\n').lower()
-    if time_period == 'month' or time_period == 'm':
-        month = get_month()
-    elif time_period == 'day' or time_period == 'd':
-        day = get_day()
-    elif time_period == 'none' or time_period == 'n':
-        return 'none'
-    else:    
-        print('That is not a valid answer. Please try again.')
+    while True: 
+        time_period = input('Would you like to filter the data by month, day, or not at all? Type "none" for no time filter.\n').lower()
+        if time_period == 'month' or time_period == 'm':
+            month = get_month()
+            return 'month'
+        elif time_period == 'day' or time_period == 'd':
+            day = get_day()
+            return 'day'
+        elif time_period == 'none' or time_period == 'n':
+            return 'none'
+        else:    
+            print('That is not a valid answer. Please try again.')
       
 # get month for filtering
 def get_month():
@@ -62,10 +69,11 @@ def get_month():
     Returns:
         (str) Month filter for the bikeshare data.
     '''
-    try:
-      return input('January, February, March, April, May, or June?\n').lower()
-    except:
-      print('That is not a valid answer. Please try again.')
+    while True:
+        month_selection = input('Select a month, January - June \n')
+        if month_selection.lower() in months:
+            return month_selection  
+        print('That is not a valid answer. Please try again.')
 
 # get day of week for filtering
 def get_day():
@@ -75,9 +83,11 @@ def get_day():
     Returns:
         (str) Day filter for the bikeshare data.
     '''
-    try:
-        return input('\nWhich day of the week? Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, or Sunday?\n').title()
-    except:    
+    while True:
+        day_selection = input('Which day of the week? \n')
+        if day_selection.lower() in days:
+            return day_selection
+            print('Great! We\'ll use %s.' % day_selection)
         print('That is not a valid answer. Please try again.')
 
 def display_data(city_data, row):
@@ -208,7 +218,7 @@ def main():
     elif restart.lower() == 'no' or restart.lower() == 'n':
         return
     else:
-        print("\nI'm not sure if you wanted to restart or not. Let's try again.")
+        print("\nThat is not a valid answer. Please try again.")
         return restart()
 
 if __name__ == "__main__":
