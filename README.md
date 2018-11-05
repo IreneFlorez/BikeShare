@@ -23,6 +23,7 @@ The Chicago and New York City files also contain the following two columns:
 
 ## Questions explored
 The script answers the following questions about the bike share data:
+
 Popular times of travel
 * What is the most popular month for start time?
 * What is the most popular day of week (Monday, Tuesday, etc.) for start time?
@@ -50,5 +51,5 @@ User information
 * Are certain user age groups more likely to use the bikeshare system than others?
 
 ## Resources
-https://pandas.pydata.org/pandas-docs/stable/api.html#datetimelike-properties
-https://pandas.pydata.org/pandas-docs/stable/generated/pandas.to_datetime.html
+* https://pandas.pydata.org/pandas-docs/stable/api.html#datetimelike-properties
+* https://pandas.pydata.org/pandas-docs/stable/generated/pandas.to_datetime.html
