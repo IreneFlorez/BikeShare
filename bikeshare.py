@@ -2,6 +2,7 @@
 import pandas as pd
 import datetime # operations to parse dates
 import time
+import calendar
 import csv
 
 # supported cities, months, days
@@ -11,10 +12,8 @@ city_data = {'chicago': 'chicago.csv',
 cities = ['chicago', 'new york', 'washington']
 months = ['january', 'february', 'march', 'april', 'may', 'june']
 days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday']
-time_period = []
-city_selected=get_city()
-time_period=get_time_period()
- 
+months = {v.lower(): k for k, v in enumerate(calendar.month_name)}
+days = {v.lower(): k for k, v in enumerate(calendar.day_name)}
 
 #get user input for city
 def get_city():
@@ -44,6 +43,7 @@ def get_time_period():
     '''
     while True: 
         time_period = input('Would you like to filter the data by month, day, or not at all? Type "none" for no time filter.\n').lower()
+        print('Great! Time period selected: %s' % time_period)
         if time_period == 'month' or time_period == 'm':
             month = get_month()
             return 'month'
@@ -51,6 +51,7 @@ def get_time_period():
             day = get_day()
             return 'day'
         elif time_period == 'none' or time_period == 'n':
+            print('Great! You selected none')
             return 'none'
         else: print('That is not a valid answer. Please try again.')
       
@@ -65,6 +66,7 @@ def get_month():
     while True:
         month_selection = input('Select a month, January - June \n')
         if month_selection.lower() in months:
+            print('Great! We\'ll use %s.' % month_selection)
             return month_selection  
         print('That is not a valid answer. Please try again.')
 
@@ -79,10 +81,11 @@ def get_day():
     while True:
         day_selection = input('Which day of the week? \n')
         if day_selection.lower() in days:
+            print('Great! We\'ll use %s.' % day_selection)
             return day_selection
         print('That is not a valid answer. Please try again.')
 
-def load_data(city_selection, month_selection, day_selection):
+def load_data(city_selection, month_selection, day_selection, time_period):
     '''Read CSV (comma-separated) file into DataFrame
     Args:
         (str) city - name of the city to analyze - city filter from get_city()
@@ -91,7 +94,7 @@ def load_data(city_selection, month_selection, day_selection):
     Returns:
         DataFrame for the specified city's bikeshare data-containing city data filtered by month and day.   
     '''
-    city_data = pd.read_csv(city_data[city])
+    city_data = pd.read_csv(city_data[city_selection])
 
     # parse datetime 
     city_data['Start Time'] = pd.to_datetime(city_data['Start Time'])
@@ -104,11 +107,6 @@ def load_data(city_selection, month_selection, day_selection):
     city_data['Journey'] = city_data['Start Station'].str.cat(city_data['End Station'], sep=' to ')
     #format column names
     city_data.columns = [x.strip().replace(' ', '_') for x in city_data.columns]
-
-    # if (period == 'month'):
-    #     city_data['Start_Time'].dt.month 
-    # elif (period == 'day'):
-    #     city_data['Start_Time'].dt.weekday_name
 
     # filter by month if applicable
     if month_selection != 'all':
@@ -124,6 +122,12 @@ def load_data(city_selection, month_selection, day_selection):
     return city_data
 
 def display_statistics(city_data):
+    '''Displays city data statistics on the specified filters
+    Args:
+        city_data
+    Returns:
+        statistics
+    '''
     #Print heading that specifies selected city, filters
     print('\n')
     print('-------------------------------------')
@@ -179,6 +183,12 @@ def display_statistics(city_data):
         user_statistics(city_data)
 
 def user_statistics(city_data):
+    '''Displays city data statistics on the specified filters, for specified cities
+    Args:
+        city_data
+    Returns:
+        statistics
+    '''
     #Display counts of gender
     # Display earliest, most recent, and most common year of birth
     #gender_count = city_data.groupby('Gender')['Gender'].count()
@@ -219,24 +229,15 @@ def main():
     """
     Loads analysis and data for the specified city and filters by month and day if applicable.
     """
-    # pick a city
-
+    # pick a city   
     city = get_city()
     print('Great! We\'ll use %s.' % city)
     # choose time period
     time_period = get_time_period()
-    # print('Great! Time period selected: %s' % period)
-    # if time_period == 'month':
-    #     print('Great! We\'ll use %s.' % month_selection)
-    # elif time_period == 'day':
-    #     print('Great! We\'ll use %s.' % day_selection)
-    # elif time_period == 'none':
-    #     print('Great! You selected' % none)
-
-
+    city_selection = []
     # load the file with input from above
     # Filter by time period (month, day, none)
-    load_data(city_selection, month_selection, day_selection)
+    load_data
     #city_data = load_data(city_data[city], month_selection, day_selection)
     display_statistics (city_data)
     see_data = display_data(city_data, row=76)
@@ -252,3 +253,4 @@ def main():
 
 if __name__ == "__main__":
 	main()
+
