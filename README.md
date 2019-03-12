@@ -10,8 +10,8 @@ You can also open the Data_Review_Chicago.ipynb file to view much of the data an
 1) download the bikehsare folder onto your computer
 2) open terminal
 3) navigate to the location of your bikeshare folder
-type the following into terminal 
-/python 3 bikeshare.py/
+4) type the following into terminal 
+/ python bikeshare.py /
 
 ## Datasets
 The datasets used for this script contain bike share data for the first six months of 2017.  You can access the original data files here [Chicago](https://www.divvybikes.com/system-data), [New York City](https://www.citibikenyc.com/system-data), [Washington](https://www.capitalbikeshare.com/system-data). Some data wrangling, to reduce columns and reformat, has been performed to condense these files to the core six columns used in this project. This makes the analysis and the evaluation in this project more straightforward.
