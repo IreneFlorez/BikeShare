@@ -23,6 +23,7 @@ The Chicago and New York City files also contain the following two columns:
 
 ## Questions explored
 The script answers the following questions about the bike share data:
+
 Popular times of travel
 * What is the most popular month for start time?
 * What is the most popular day of week (Monday, Tuesday, etc.) for start time?
@@ -50,5 +51,13 @@ User information
 * Are certain user age groups more likely to use the bikeshare system than others?
 
 ## Resources
-https://pandas.pydata.org/pandas-docs/stable/api.html#datetimelike-properties
-https://pandas.pydata.org/pandas-docs/stable/generated/pandas.to_datetime.html
+* https://pandas.pydata.org/pandas-docs/stable/api.html#datetimelike-properties
+* https://pandas.pydata.org/pandas-docs/stable/generated/pandas.to_datetime.html
+
+
+
+The datetime module contains many useful methods for handling date filtering and extraction:
+strftime converts date objects into readable strings: https://www.programiz.com/python-programming/datetime/strftime
+strptime takes strings and converts them into date objects that Python can understand: https://www.programiz.com/python-programming/datetime/strptime
+strf & strp time: https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior
+This stackoverflow answer explains perfectly how to extract day, month, year from a Date: https://stackoverflow.com/questions/21954197/which-is-the-fastest-way-to-extract-day-month-and-year-from-a-given-date/21954923#21954923
