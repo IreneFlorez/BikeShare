@@ -1,18 +1,28 @@
 # Importing packages and functions
 import pandas as pd
+from pathlib import Path
 import datetime # operations to parse dates
-
 import calendar
 import csv
+import zipfile
+
+#unzip new york file 
+with zipfile.ZipFile("new_york_city.csv.zip","r") as zip_ref:
+    zip_ref.extractall("new_york_city")
+with zipfile.ZipFile("washington.csv.zip","r") as zip_ref:
+    zip_ref.extractall("washington")    
 
 # supported cities, months, days
 city_data = {'chicago': 'chicago.csv',
-          'new york': 'new_york_city.csv',
-          'washington': 'washington.csv'}
+          'new york': 'new_york_city/new_york_city.csv',
+          'washington': 'washington/washington.csv'}
+
+"""           data_folder = Path("BikeShare/")
+          file_to_open = data_folder / "raw_data.txt"
+          print(file_to_open.read_text()) """
+
 months = {v.lower(): k for k, v in enumerate(calendar.month_name)}
-#months = ('january', 'february', 'march', 'april', 'may', 'june')
 days = {v.lower(): k for k, v in enumerate(calendar.day_name)}
-#days = ('monday','tuesday','wednesday','thursday','friday','saturday','sunday')
 
 #get user input for city
 def get_city():
@@ -32,10 +42,6 @@ def get_city():
         else:
             print('That is not a valid answer. Please try again.')
 
-# 1) pick a city   
-city = get_city()
-print('Great! We\'ll use %s.' % city)
-
 def get_raw_city_data(city):
     '''Read CSV (comma-separated) file into DataFrame
     Args:
@@ -46,9 +52,6 @@ def get_raw_city_data(city):
     raw_city_data = pd.read_csv(city_data[city])
     return raw_city_data
   
-  # 3) load data
-raw_city_data = get_raw_city_data(city)
-
 def clean_data(raw_city_data):
     '''Read CSV (comma-separated) file into DataFrame
     Args:
@@ -67,22 +70,22 @@ def clean_data(raw_city_data):
     return raw_city_data
 
 def parse_data(raw_city_data):
-'''Read CSV (comma-separated) file into DataFrame
-Args:
-    (obj) raw_city_data from get_raw_city_data(city)
-Returns:
-    (obj) parsed raw_city_data   
-''' 
-# parse datetime 
-raw_city_data['start_time'] = pd.to_datetime(raw_city_data['start_time'])
-raw_city_data['end_time'] = pd.to_datetime(raw_city_data['end_time'])
+    '''Read CSV (comma-separated) file into DataFrame
+    Args:
+        (obj) raw_city_data from get_raw_city_data(city)
+    Returns:
+        (obj) parsed raw_city_data   
+    ''' 
+    # parse datetime 
+    raw_city_data['start_time'] = pd.to_datetime(raw_city_data['start_time'])
+    raw_city_data['end_time'] = pd.to_datetime(raw_city_data['end_time'])
 
-# extract month and hour from the Start Time column to create month, hour columns
-raw_city_data['month'] = raw_city_data['start_time'].dt.month
-raw_city_data['day_of_week'] = raw_city_data['start_time'].dt.weekday_name
-raw_city_data['hour'] = raw_city_data['start_time'].dt.hour 
+    # extract month and hour from the Start Time column to create month, hour columns
+    raw_city_data['month'] = raw_city_data['start_time'].dt.month
+    raw_city_data['day_of_week'] = raw_city_data['start_time'].dt.weekday_name
+    raw_city_data['hour'] = raw_city_data['start_time'].dt.hour 
 
-return raw_city_data
+    return raw_city_data
 
 def filter_data(raw_city_data):
     '''Asks the user for a time period and filter the basic processed data according 
@@ -130,7 +133,7 @@ def filter_data(raw_city_data):
 
     return filtered_city_data
 
- def display_statistics(filtered_city_data):
+def display_statistics(filtered_city_data, city):
     '''Displays city data statistics (trip, user) on the specified filters
     Args:
         (ob) filtered_city_data
@@ -172,6 +175,9 @@ def filter_data(raw_city_data):
     
     if city == 'chicago' or city == 'new york': 
         user_statistics(filtered_city_data)
+
+        #city.lower()
+        #filtered_city_data
 
 def display_month_day_hour_statistics(filtered_city_data):
     '''Displays city data statistics (month, day, hour) on the specified filters.
@@ -241,8 +247,6 @@ def display_data(filtered_city_data, row):
     else:
         print('That is not a valid answer. Please try again.')
         return display_data(filtered_city_data, row)
-
-
       
 def main():
     """
@@ -265,7 +269,7 @@ def main():
     filtered_city_data = filter_data(raw_city_data)
     
     #6) display statistics
-    display_statistics(filtered_city_data)
+    display_statistics(filtered_city_data, city)
     
     #7) display statistics on most popular month and day overall
     display_month_day_hour_statistics(filtered_city_data)
